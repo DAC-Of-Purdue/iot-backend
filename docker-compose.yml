@@ -6,4 +6,19 @@ services:
       - "9001:9001"
     volumes:
       - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
-    
+  database:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: go
+      POSTGRES_PASSWORD: green
+      POSTGRES_DB: compose
+    volumes:
+      - ./db:/var/lib/postgresql/data
+  application:
+    image: go-greener:latest
+    ports:
+      - "8000:8000"
+    depends_on:
+      - database
